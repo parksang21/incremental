@@ -1,0 +1,7 @@
+*.pyc
+docker.sh
+ml_workspace.sh
+*mac*
+*.pkl
+*.pth
+.*/
