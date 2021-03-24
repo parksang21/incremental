@@ -168,3 +168,14 @@ def update_config(yml, argv):
                 if isinstance(yml[key], dict):
                     update_config(yml[key], argv)
             yml[name] = val
+
+def set_log_dir(path):
+    from datetime import datetime
+    now = datetime.now()
+    t_msg = f"_{now.year}_{now.month}_{now.day}_{now.hour}:{now.minute}:{now.second}"
+    path += t_msg
+
+    os.makedirs(path, exist_ok=True)
+    print(f"log path is {path}")
+
+    return path

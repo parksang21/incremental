@@ -1,4 +1,4 @@
-from cutils import dict_str, get_yaml, update_config
+from cutils import dict_str, get_yaml, update_config, set_log_dir
 from trainer import get_trainer
 from config import Config
 
@@ -26,7 +26,6 @@ parser.add_argument("--momentum", help="optim momentum", type=float)
 parser.add_argument("--emb-dim", type=int)
 
 parser.add_argument("--debug", default=False, action='store_true')
-parser.add_argument("--msg", default=None, help="message")
 parser.add_argument("--train", default=False, action='store_true')
 parser.add_argument("--test", default=False, action='store_true')
 parser.add_argument("--weight", help='weight path')
@@ -46,6 +45,22 @@ msg = (
 print(msg)
 
 if __name__ == '__main__':
+
     config = Config(config_yaml)
+
+    # log dir is ./log under current directory
+    if not config.debug:
+        message = input(f"trial name: ")
+        config.log_dir = os.path.join(os.path.abspath("."), 'log', config.trainer ,message)
+        config.log_dir = set_log_dir(config.log_dir)
+        print(config.log_dir)
+
     trainer = get_trainer(config)
 
+    if config.train:
+        trainer.train()
+
+    if config.test:
+        trainer.test()
+
+    print(f"program successfully ended")
