@@ -1,6 +1,6 @@
 from cutils import dict_str, get_yaml, update_config
-# from trainer import get_trainer
-# from config import Config
+from trainer import get_trainer
+from config import Config
 
 import argparse
 import os
@@ -30,7 +30,7 @@ parser.add_argument("--msg", default=None, help="message")
 parser.add_argument("--train", default=False, action='store_true')
 parser.add_argument("--test", default=False, action='store_true')
 parser.add_argument("--weight", help='weight path')
-parser.add_argument("--map", action='store_true', default=False)
+# parser.add_argument("--map", action='store_true', default=False)
 argv = parser.parse_args()
 config_argv = argv.__dict__
 
@@ -45,7 +45,7 @@ msg = (
 )
 print(msg)
 
-
 if __name__ == '__main__':
-    from trainer import BaseTrainer
-    BaseTrainer(None)
+    config = Config(config_yaml)
+    trainer = get_trainer(config)
+
