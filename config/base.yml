@@ -1,9 +1,14 @@
 
-trainer:
-  - baseTrainer
-
 epoch: 32
 lr: 1e-4
 weight_decay: 1e-2
 
 data: cifar10
+
+trainer: test_classification
+
+data_dir: /datasets
+
+emb_dim: 128
+
+log_dir: /workspace/log

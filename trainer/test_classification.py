@@ -5,23 +5,32 @@ from data.cifar10 import SplitCifar10
 import torch
 import torch.nn as nn
 import torchvision
+import shutil
 
 
 class TestClassification(BaseTrainer):
     def __init__(self, config):
         super(TestClassification, self).__init__(config)
 
-        # self.trainset = torchvision.datasets.CIFAR10(self.config.data_dir, True,
-        #                                              general_transform['train'])
-        #
-        # self.testset = torchvision.datasets.CIFAR10(self.config.data_dir,
-        #                                             train=False,
-        #                                             transform=general_transform['test'])
+        if not self.config.debug:
+            if self.config.log_dir is not None:
+                shutil.copy(__file__, self.config.log_dir)
+                print(f"{__file__} has been saved")
+
         self.trainset = SplitCifar10(self.config.data_dir,
                                      train=True,
                                      transform=general_transform['train'])
 
-        self.model = torchvision.models.resnet18(pretrained=False)
-        self.model.fc = nn.Linear(self.model.fc.in_features, self.config.emb_dim)
+        self.testset = SplitCifar10(self.config.data_dir,
+                                    train=True,
+                                    transform=general_transform['test'])
 
-        print(self.model)
+        self.model = torchvision.models.resnet18(pretrained=False)
+        self.model.fc = nn.Linear(self.model.fc.in_features, 10)
+
+        if config.debug:
+            print(self.model)
+
+    def train(self):
+        print(f"TRAIN")
+

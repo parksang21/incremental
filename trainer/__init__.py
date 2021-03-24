@@ -4,6 +4,7 @@ import torch.nn as nn
 import os
 import shutil
 from typing import Any
+from abc import ABCMeta, abstractmethod
 
 
 def get_trainer(config):
@@ -11,8 +12,11 @@ def get_trainer(config):
         from trainer.test_classification import TestClassification
         return TestClassification(config)
 
+    if config.trainer == 'sim_distance':
+        from trainer.sim_distance import SimDistanceModel
+        return SimDistanceModel(config)
 
-class BaseTrainer():
+class BaseTrainer(metaclass=ABCMeta):
     def __init__(self,
                  config: Any
                  ) -> None:
@@ -22,3 +26,11 @@ class BaseTrainer():
         self.config = config
 
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    @abstractmethod
+    def train(self):
+        pass
+
+    @abstractmethod
+    def test(self):
+        pass
