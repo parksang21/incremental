@@ -167,3 +167,4 @@ def update_config(yml, argv):
             for key in yml.keys():
                 if isinstance(yml[key], dict):
                     update_config(yml[key], argv)
+            yml[name] = val
