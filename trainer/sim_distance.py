@@ -48,9 +48,9 @@ class SimDistanceModel(BaseTrainer):
             for pos_1, pos_2, targets in tqdm(loader):
                 pos_1, pos_2, targets = pos_1.to(self.device), pos_2.to(self.device), targets.to(self.device)
 
-                sim_mat, logit = self.model(torch.cat([pos_1, pos_2], dim=0))
+                outputs, logit = self.model(torch.cat([pos_1, pos_2], dim=0))
 
-                sim, logit = similarity(sim_mat)
+                sim, logit = similarity(outputs)
 
                 loss = criterion(sim, logit)
 
@@ -69,6 +69,7 @@ class SimDistanceModel(BaseTrainer):
         pass
 
     def save(self):
-        state_dict = self.model.state_dict()
-        torch.save(state_dict, self.config.log_dir+"/model.pth")
-        print(f"model has been saved")
+        if not self.debug:
+            state_dict = self.model.state_dict()
+            torch.save(state_dict, self.config.log_dir+"/model.pth")
+            print(f"model has been saved")

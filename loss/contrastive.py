@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from loss.distance import CosineSim
 
 
 # only for positive sim
@@ -10,6 +11,7 @@ class Contrastive(nn.Module):
         self.device = device
         self.temperature = temperature
         self.metric = metric
+        self.cos_sim = CosineSim()
 
     # positive + negative w cross entropy loss
     def forward(self, features):
@@ -17,10 +19,11 @@ class Contrastive(nn.Module):
         labels = (labels.unsqueeze(0) == labels.unsqueeze(1)).float()
         labels = labels.to(self.device)
 
-        features = F.normalize(features, dim=1)
+        # features = F.normalize(features, dim=1)
 
         # similarity 계산하는 부분이다.
-        similarity_matrix = torch.matmul(features, features.T)
+        # similarity_matrix = torch.matmul(features, features.T)
+        similarity_matrix = self.cos_sim(features, features)
         # assert similarity_matrix.shape == (
         #     self.args.n_views * self.args.batch_size, self.args.n_views * self.args.batch_size)
         # assert similarity_matrix.shape == labels.shape
