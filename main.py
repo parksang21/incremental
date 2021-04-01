@@ -54,6 +54,7 @@ if __name__ == '__main__':
         config.log_dir = os.path.join(os.path.abspath("."), 'log', config.trainer ,message)
         config.log_dir = set_log_dir(config.log_dir)
         print(config.log_dir)
+        config.save(config.log_dir + "/config.yml")
 
     trainer = get_trainer(config)
 
