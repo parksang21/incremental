@@ -19,11 +19,11 @@ class Contrastive(nn.Module):
         labels = (labels.unsqueeze(0) == labels.unsqueeze(1)).float()
         labels = labels.to(self.device)
 
-        # features = F.normalize(features, dim=1)
+        # calculate similarity, here, normalize and matmul calculates cosine sim
+        features = F.normalize(features, dim=1)
+        similarity_matrix = torch.matmul(features, features.T)
 
-        # similarity 계산하는 부분이다.
-        # similarity_matrix = torch.matmul(features, features.T)
-        similarity_matrix = self.cos_sim(features, features)
+        # similarity_matrix = self.cos_sim(features, features)
         # assert similarity_matrix.shape == (
         #     self.args.n_views * self.args.batch_size, self.args.n_views * self.args.batch_size)
         # assert similarity_matrix.shape == labels.shape

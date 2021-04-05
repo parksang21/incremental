@@ -3,6 +3,7 @@ from model.simclr import SimModel
 from model.cnn import encoder32
 from data.cifar10 import SplitSimCIFAR10, simclr_transform
 from loss.contrastive import Contrastive
+from cutils import print_log
 from loss.distance import CosineSim
 
 from torch.utils.data import DataLoader
@@ -42,7 +43,12 @@ class SimDistanceModel(BaseTrainer):
         criterion = nn.CrossEntropyLoss().to(self.device)
 
         min_loss = 10
+
         for epoch in range(self.config.epoch):
+
+            log_info = {
+                'batch_loss': .0,
+            }
 
             batch_loss = .0
             for pos_1, pos_2, targets in tqdm(loader):
@@ -59,9 +65,11 @@ class SimDistanceModel(BaseTrainer):
                 optimizer.step()
                 batch_loss += loss.item()
 
-            print(batch_loss / len(loader))
-            if min_loss > batch_loss /  len(loader):
-                min_loss = batch_loss / len(loader)
+            batch_loss /= len(loader)
+            log_info['batch_loss'] = batch_loss
+            print_log(f"{epoch} / {self.config.epoch}", log_info)
+            if min_loss > batch_loss:
+                min_loss = batch_loss
                 self.save()
 
 
@@ -69,7 +77,7 @@ class SimDistanceModel(BaseTrainer):
         pass
 
     def save(self):
-        if not self.debug:
+        if not self.config.debug:
             state_dict = self.model.state_dict()
             torch.save(state_dict, self.config.log_dir+"/model.pth")
             print(f"model has been saved")
