@@ -8,9 +8,9 @@ import torchvision
 import shutil
 
 
-class TestClassification(BaseTrainer):
+class Classification(BaseTrainer):
     def __init__(self, config):
-        super(TestClassification, self).__init__(config)
+        super(Classification, self).__init__(config)
 
         if not self.config.debug:
             if self.config.log_dir is not None:
@@ -27,6 +27,10 @@ class TestClassification(BaseTrainer):
 
         self.model = torchvision.models.resnet18(pretrained=False)
         self.model.fc = nn.Linear(self.model.fc.in_features, 10)
+
+        self.model = nn.Sequential(
+            *list(torchvision.models.resnet18(pretrained=False).children())[:-1]
+        )
 
         if config.debug:
             print(self.model)

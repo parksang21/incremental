@@ -1,4 +1,4 @@
-name: incremental
+name: embedding_detail
 channels:
   - pytorch
   - anaconda
@@ -103,4 +103,4 @@ dependencies:
   - pip:
     - pyyaml==5.4.1
     - tqdm==4.59.0
-prefix: /opt/conda/envs/incremental
+prefix: /opt/conda/envs/embedding_detail

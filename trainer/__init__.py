@@ -8,9 +8,9 @@ from abc import ABCMeta, abstractmethod
 
 
 def get_trainer(config):
-    if config.trainer == 'test_classification':
-        from trainer.test_classification import TestClassification
-        return TestClassification(config)
+    if config.trainer == 'classification':
+        from trainer.classification import Classification
+        return Classification(config)
 
     if config.trainer == 'sim_distance':
         from trainer.sim_distance import SimDistanceModel
