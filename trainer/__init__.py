@@ -27,6 +27,7 @@ class BaseTrainer(metaclass=ABCMeta):
 
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+
     @abstractmethod
     def train(self):
         pass
@@ -34,3 +35,6 @@ class BaseTrainer(metaclass=ABCMeta):
     @abstractmethod
     def test(self):
         pass
+
+    def to_device(self, *args):
+        return (args[i].to(self.device) for i in range(len(args)))

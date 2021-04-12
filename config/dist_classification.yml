@@ -2,17 +2,20 @@
 epoch: 100
 lr: 1e-4
 weight_decay: 1e-2
+momentum: 0.9
 
 data: cifar10
 
-trainer: sim_distance
+trainer: classification
 
 data_dir: /datasets
 
-emb_dim: 128
+emb_dim: 2048
 
 split: [0, 1, 2, 3, 4, 5]
 
-batch_size: 32
+num_classes: 10
+
+batch_size: 512
 
 num_workers: 2
